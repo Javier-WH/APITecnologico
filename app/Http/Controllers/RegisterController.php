@@ -25,24 +25,34 @@ class RegisterController extends Controller
 
     public function show(Request $request)
     {
-        $id = $request->query("id");
-        $userData = User::find($id);
-        $data =[
-            "id" => $userData->id,
-            "user" => $userData->user,
-            "level" => $userData->level
-        ];
-        return jsonResponse(data: $data, message: "OK", status: 200);
+        try {
+            $id = $request->query("id");
+            $userData = User::find($id);
+            $data =[
+                "id" => $userData->id,
+                "user" => $userData->user,
+                "level" => $userData->level
+            ];
+            return jsonResponse(data: $data, message: "OK", status: 200);
+       
+        } catch (\Throwable $th) {
+            return jsonResponse(message: "User not found", status: 404);
+        }
     }
 
     public function update(CreateUserRequest $request)
     {
-        $userData = User::find($request->id);
-        $userData->user = $request->user;
-        $userData->password = $request->password;
-        $userData->level = $request->level;
-        $userData->save();
-        return jsonResponse(data: ["user_id" => $request->id], message: "User updated", status: 201);
+        try {
+            $userData = User::find($request->id);
+            $userData->user = $request->user;
+            $userData->password = $request->password;
+            $userData->level = $request->level;
+            $userData->save();
+            return jsonResponse(data: ["user_id" => $request->id], message: "User updated", status: 201);
+
+        } catch (\Throwable $th) {
+            return jsonResponse(message: "User not found", status: 404);
+        }
     }
 
     public function delete(Request $request)
