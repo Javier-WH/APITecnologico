@@ -11,17 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->rememberToken();
-            $table->timestamps();
+        Schema::create('api_users', function (Blueprint $table) {
+            $table->uuid('id')->primary()->nullable(false);
+            $table->string('user', 50)->unique()->nullable(false);
+            $table->string('password', 255)->nullable(false);
+            $table->unsignedTinyInteger('level')
+                ->default(3)
+                ->comment('1 = Admin, 2 = User, 3 = Guest')
+                ->check('level IN (1, 2, 3)');
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });
 
-        Schema::create('password_reset_tokens', function (Blueprint $table) {
+        /*Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();
             $table->string('token');
             $table->timestamp('created_at')->nullable();
@@ -34,7 +36,7 @@ return new class extends Migration
             $table->text('user_agent')->nullable();
             $table->longText('payload');
             $table->integer('last_activity')->index();
-        });
+        });*/
     }
 
     /**
@@ -42,8 +44,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
-        Schema::dropIfExists('password_reset_tokens');
-        Schema::dropIfExists('sessions');
+        Schema::dropIfExists('api_users');
+        /*Schema::dropIfExists('password_reset_tokens');
+        Schema::dropIfExists('sessions');*/
     }
 };

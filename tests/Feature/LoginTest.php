@@ -24,11 +24,11 @@ class LoginTest extends TestCase
     {
        
         $credentials = [
-            'email' => 'test@test.com',
+            'user' => 'TestUser',
             'password' => 'test1234',
         ];
 
-        $response = $this->post("{$this->baseUrl}/login", $credentials);
+        $response = $this->postJson("{$this->baseUrl}/login", $credentials);
 
         $response->assertStatus(200);
         $response->assertJsonStructure([
@@ -45,11 +45,11 @@ class LoginTest extends TestCase
     {
 
         $credentials = [
-            'email' => 'falso@correoFalso.com',
+            'user' => 'falso@correoFalso.com',
             'password' => 'unknown1234',
         ];
 
-        $response = $this->post("{$this->baseUrl}/login", $credentials);
+        $response = $this->postJson("{$this->baseUrl}/login", $credentials);
 
 
         $response->assertStatus(401);
@@ -58,5 +58,41 @@ class LoginTest extends TestCase
             'message' => 'Credenciales Invalidas',
             'errors' => ['unauthorized' => 'Credenciales Invalidas']
         ]);
+    }
+
+    /**
+     * @test
+     */
+    public function an_user_must_be_provided(): void
+    {
+        $credentials = ['password' => 'testPassword'];
+        $response = $this->postJson("{$this->baseUrl}/login", $credentials);
+       // $response->dd();
+        $response->assertStatus(422);  
+        $response->assertJsonStructure([
+            'errors' => ['user'],
+            'message',
+            'status',
+            'data'
+        ]);
+       
+    }
+
+    /**
+     * @test
+     */
+    public function a_password_must_be_provided(): void
+    {
+        $credentials = ['user' => 'testUser'];
+        $response = $this->postJson("{$this->baseUrl}/login", $credentials);
+        //$response->dd();
+        $response->assertStatus(422);
+        $response->assertJsonStructure([
+            'errors' => ['password'],
+            'message',
+            'status',
+            'data'
+        ]);
+     
     }
 }
