@@ -21,8 +21,13 @@ class UserRegisterTest extends TestCase
             'level' => '1',
         ];
         
-        $response = $this->postJson("{$this->baseUrl}/users", $data);
-        $response->assertStatus(200);
+        $response = $this->postJson("{$this->baseUrl}/user", $data);
+        $response->assertStatus(201);
+        $response->assertJsonStructure([
+            'data' => ['user_id'],
+            'message',
+            'status'
+        ]);
         $this->assertDatabaseHas('api_users',["user" => "TestUser2"]);
 
     }

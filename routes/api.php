@@ -7,4 +7,8 @@ use App\Http\Controllers\RegisterController;
 
 Route::post('/login', [LoginController::class, 'login']);
 
-Route::post('/users', [RegisterController::class, 'store']);
+Route::get('/user', [RegisterController::class, 'show'])->middleware('validateToken');
+
+Route::post('/user', [RegisterController::class, 'store']);
+
+Route::put('/user', [RegisterController::class, 'update']);
