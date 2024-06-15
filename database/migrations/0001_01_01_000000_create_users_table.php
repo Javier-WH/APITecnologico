@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('api_users', function (Blueprint $table) {
-            $table->uuid('id')->primary()->nullable(false);
+            $table->uuid('id', 36)->primary()->nullable(false);
             $table->string('user', 50)->unique()->nullable(false);
             $table->string('password', 255)->nullable(false);
             $table->unsignedTinyInteger('level')

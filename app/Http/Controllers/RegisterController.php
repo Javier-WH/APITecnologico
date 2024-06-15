@@ -57,8 +57,13 @@ class RegisterController extends Controller
 
     public function delete(Request $request)
     {
-        $userData = User::find($request->id);
-        $userData->delete();
-        return jsonResponse(data: ["user_id" => $request->id], message: "User deleted", status: 201);
+        try {
+            $userData = User::find($request->id);
+            $userData->delete();
+            return jsonResponse(data: ["user_id" => $request->id], message: "User deleted", status: 201);
+
+        } catch (\Throwable $th) {
+            return jsonResponse(message: "User not found", status: 404);
+        }
     }
 }

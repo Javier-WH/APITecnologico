@@ -19,6 +19,8 @@ return Application::configure(basePath: dirname(__DIR__))
         //
         $middleware->alias([
             'validateToken' => \App\Http\Middleware\validateTokenMiddleware::class,
+            'validateAdmin' => \App\Http\Middleware\validateAdminMiddleware::class,
+            'validateUser' => \App\Http\Middleware\validateUserMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

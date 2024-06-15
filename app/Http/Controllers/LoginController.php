@@ -23,9 +23,19 @@ class LoginController extends Controller
             );
         }
 
+        $user = auth()->user();
+        $payload = [
+            'id' => $user->id,
+            'user' => $user->user,
+            'level' => $user->level,
+        ];
+
+        $token = auth()->claims($payload)->attempt($credentials);
+        
+
         return jsonResponse(data: [
             'token' => $token,
-            'expires_in' => auth()->factory()->getTTL() * 60
+            'expires_in' => auth()->factory()->getTTL() * 60,
         ]);
     }
 }
