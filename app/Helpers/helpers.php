@@ -7,7 +7,6 @@ function jsonResponse($data = [], $status = 200, $message = 'OK', $errors = []){
 }
 
 function validadateLevel($payload, $type): bool{
-  
   try {
     $id = $payload->get('id');
     $level = $payload->get('level');
@@ -34,4 +33,16 @@ function validadateLevel($payload, $type): bool{
     return false;
   }
   return true;
+}
+
+
+//coloca todos los elementos en minusculas
+function normalizeResponseArrayData(array $data)
+{
+    return array_map(function ($value) {
+        if (is_string($value)) {
+            return strtolower($value);
+        }
+        return $value;
+    }, $data);
 }
