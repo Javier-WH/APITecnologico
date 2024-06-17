@@ -23,6 +23,7 @@ class LoginController extends Controller
             );
         }
 
+        //payload personalizado para el token
         $user = auth()->user();
         $payload = [
             'id' => $user->id,
@@ -30,8 +31,9 @@ class LoginController extends Controller
             'level' => $user->level,
         ];
 
+        //crea el token
         $token = auth()->claims($payload)->attempt($credentials);
-        
+
 
         return jsonResponse(data: [
             'token' => $token,
