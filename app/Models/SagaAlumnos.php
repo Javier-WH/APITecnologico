@@ -9,6 +9,7 @@ class SagaAlumnos extends Model
 {
     use HasFactory;
     protected $table = 'alumnos';
+    public $timestamps = false;
 
     protected $fillable = [
         'id',
@@ -36,6 +37,13 @@ class SagaAlumnos extends Model
         'discapacidad_id',
         'dconsignados',
         'user_id',
-        'etnia_id'
+        'etnia_id',
+        //campos que requiere la base de datos por que no tienen valor por defecto
+        'CodigoCuidad',
+        'DescripcionMunicipio',
+        'CodigoOpsu',
+        'Observacion',
+        'CodigoCarnet',
+        'estatus',
     ];
 }

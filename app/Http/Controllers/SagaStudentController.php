@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SagaAddStudentRequest;
 use App\Http\Requests\SagaFindStudentRequest;
 use App\Models\SagaAlumnos;
 use Illuminate\Http\Request;
@@ -56,5 +57,20 @@ class SagaStudentController extends Controller
         $responseData = normalizeResponseArrayData($student->toArray());
 
         return jsonResponse(data: $responseData, message: "OK", status: 200);
+    }
+
+    public function addStudent(SagaAddStudentRequest $request)
+    {
+        $data = $request->all();
+        //campos que requiere la base de datos por que no tienen valor por defecto, sin estos campos la base de datos no inserta el registro
+        $data['CodigoCuidad'] = "";
+        $data['DescripcionMunicipio'] = "";
+        $data['CodigoOpsu'] = "";
+        $data['Observacion'] = "";
+        $data['CodigoCarnet'] = "";
+        $data['estatus'] = "";
+
+        $student = SagaAlumnos::create($data);
+        return jsonResponse(data: $student, message: "El alumno fue creado con exito", status: 201);
     }
 }

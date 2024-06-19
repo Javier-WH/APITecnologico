@@ -26,10 +26,12 @@ Route::prefix('user')->middleware('validateToken')->group(function () {
   Route::delete('/', [RegisterController::class, 'delete'])->middleware('validateAdmin');
   Route::get('/', [RegisterController::class, 'show'])->middleware('validateUser');
   Route::put('/', [RegisterController::class, 'update'])->middleware('validateUser');
+  Route::patch('/', [RegisterController::class, 'updatePartial'])->middleware('validateUser');
 });
 
 
 //rutas de estudiantes del sistema SAGA
 Route::prefix('student')->middleware('validateToken')->group( function () {
     Route::get('/', [SagaStudentController::class, 'getStudent']);
+    Route::post('/', [SagaStudentController::class, 'addStudent']);
 });
