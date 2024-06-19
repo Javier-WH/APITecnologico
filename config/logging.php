@@ -52,6 +52,14 @@ return [
 
     'channels' => [
 
+
+        'general_errors' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/general_errors.log'),
+            'level' => 'error',
+            'days' => 14,
+        ],
+
         'stack' => [
             'driver' => 'stack',
             'channels' => explode(',', env('LOG_STACK', 'single')),

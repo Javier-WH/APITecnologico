@@ -4,14 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\SagaAddStudentRequest;
 use App\Http\Requests\SagaFindStudentRequest;
+use App\Http\Requests\SagaUpdateStudentRequest;
 use App\Models\SagaAlumnos;
-use Illuminate\Http\Request;
+use Exception;
 
 class SagaStudentController extends Controller
 {
 
     public function getStudent(SagaFindStudentRequest $request)
     {
+
         $request->validated();
 
         $ci = $request->query('ci');
@@ -72,5 +74,23 @@ class SagaStudentController extends Controller
 
         $student = SagaAlumnos::create($data);
         return jsonResponse(data: $student, message: "El alumno fue creado con exito", status: 201);
+    }
+
+    public function deleteStudent(SagaFindStudentRequest $request)
+    {
+        $request->validated();
+        $ci = $request->query('ci');
+        $student = SagaAlumnos::where('cedulapasaporte', $ci)->first();
+        $student->delete();
+        return jsonResponse(message: "El alumno fue borrado con exito", status: 201);
+    }
+
+    public function updateStudent(SagaUpdateStudentRequest $request)
+    {
+        $data = $request->all();
+        $ci = $request->query('ci');
+        $student = SagaAlumnos::where('cedulapasaporte', $ci)->first();
+        $student->update($data);
+        return jsonResponse(status: 204);
     }
 }
