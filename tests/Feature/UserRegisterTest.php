@@ -15,12 +15,14 @@ class UserRegisterTest extends TestCase
     public function a_user_can_register(): void
     {
         //$this->withoutExceptionHandling();
+
+
         $data = [
             'user' => 'TestUser2',
             'password' => 'test1234',
             'level' => '1',
         ];
-        
+
         $response = $this->postJson("{$this->baseUrl}/user", $data);
         $response->assertStatus(201);
         $response->assertJsonStructure([

@@ -2,12 +2,33 @@
 
 use App\Models\User;
 
-//formatea las respuestas de la api para que sean consistentes
+/**
+ * formatea las respuestas de la api para que sean consistentes
+ *
+ * Return a JSON response with a consistent structure.
+ * @param array $data The data to be returned.
+ * @param int $status The HTTP status code.
+ * @param string $message A custom message.
+ * @param array $errors An array with errors.
+ * @return \Illuminate\Http\JsonResponse The JSON response.
+ */
 function jsonResponse($data = [], $status = 200, $message = 'OK', $errors = []){
-  return response()->json(compact("data", "status", "message", "errors"), $status);
+  return response()->json([
+    'data' => $data,
+    'status' => $status,
+    'message' => $message,
+    'errors' => $errors,
+  ], $status);
 }
 
-// comprueba el nivel del usuario
+
+/**
+ * Comprueba el nivel del usuario basado en el payload
+ *
+ * @param mixed $payload The user data payload.
+ * @param int $type The type of user.
+ * @return bool Returns true if the user level is valid, false otherwise.
+ */
 function validadateLevel($payload, $type): bool{
   try {
 
@@ -43,7 +64,13 @@ function validadateLevel($payload, $type): bool{
 }
 
 
-//coloca todos los elementos en minusculas
+
+/**
+ * Coloca todos los elementos en minusculas, se utiliza para normalizar la respuesta de la api, debido a que las tablas no estan normalizadas.
+ *
+ * @param array $data The array to be normalized.
+ * @return array The normalized array.
+ */
 function normalizeResponseArrayData(array $data)
 {
     return array_map(function ($value) {

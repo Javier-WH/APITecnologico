@@ -18,13 +18,15 @@ class validateTokenMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        //se habilita para ignorar la proteccion del token y hacer pruebas
-        //return $next($request);
+        //Si MODE es igual a DEV, se desactiva la proteccion del token
+        if (env('MODE') == 'DEV') {
+            return $next($request);
+        };
+
+
         try {
             JWTAuth::parseToken()->authenticate();
-
-            $payload = JWTAuth::parseToken()->getPayload();
-
+            //JWTAuth::parseToken()->getPayload();
             return $next($request);
         } catch (TokenExpiredException $e) {
             return jsonResponse(status: 401, message: "Debe iniciar sesion de nuevo", errors: ["error" => "Token expirado"]);

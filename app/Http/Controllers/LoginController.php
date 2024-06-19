@@ -2,17 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\LoginRequest;
 use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
-    public function login(Request $request)
+    public function login(LoginRequest $request)
     {
-        $request->validate([
-            'user' => 'required|string',
-            'password' => 'required|min:8',
-        ]);
-
         $credentials = request(['user', 'password']);
 
         if (!$token = auth()->attempt($credentials)) {

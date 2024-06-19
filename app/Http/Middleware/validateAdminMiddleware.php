@@ -16,6 +16,11 @@ class validateAdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
+        //Si MODE es igual a DEV, se desactiva la proteccion del token
+        if (env('MODE') == 'DEV') {
+            return $next($request);
+        };
+
         $payload = JWTAuth::parseToken()->getPayload();
         $isValidUser = validadateLevel($payload, 1);
         if(!$isValidUser){
