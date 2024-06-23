@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use App\Http\Requests\SagaAddStudentRequest;
 use App\Http\Requests\SagaFindStudentRequest;
 use App\Http\Requests\SagaUpdateStudentRequest;
+use App\Models\ApiUserInfo;
 use App\Models\SagaAlumnos;
+use App\Models\User;
 use Exception;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class SagaStudentController extends Controller
 {
@@ -64,6 +67,16 @@ class SagaStudentController extends Controller
     public function addStudent(SagaAddStudentRequest $request)
     {
         $data = $request->all();
+
+        //esto revisa que el id del usuario conincida con el id del usuario en el sistema SAGA
+        $apiUserId = $request->header('X-User-Id');
+        $sagaUserId = ApiUserInfo::join("users", "users.ci", "=", "api_user_info.ci")
+            ->where("api_user_info.user_id", $apiUserId)
+            ->select("users.id as saga_user_id")
+            ->first();
+        $data['user_id'] = $sagaUserId ? $sagaUserId->saga_user_id : "1"; //el id del usuario es 1 por defecto debido a una reestricción de la base de datos
+
+
         //campos que requiere la base de datos por que no tienen valor por defecto, sin estos campos la base de datos no inserta el registro
         $data['CodigoCuidad'] = "";
         $data['DescripcionMunicipio'] = "";

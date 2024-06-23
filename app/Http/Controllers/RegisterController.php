@@ -7,6 +7,7 @@ use App\Http\Requests\CreateUserRequest;
 use App\Http\Requests\FindUserRequest;
 use App\Http\Requests\UpdatePartialUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Models\ApiUserInfo;
 use App\Models\User;
 
 use Illuminate\Support\Str;
@@ -31,12 +32,20 @@ class RegisterController extends Controller
         $request->validated();
         $id = $request->query("id");
         $userData = User::find($id);
+
+        $userInfo = ApiUserInfo::where("user_id", $id)
+        ->select("first_name", "last_name", "ci", "email", "phone", "address", "description")
+        ->first();
+
         $data = [
             "id" => $userData->id,
             "user" => $userData->user,
-            "level" => $userData->level
+            "level" => $userData->level,
         ];
-        return jsonResponse(data: $data, message: "OK", status: 200);
+
+        $responseData = array_merge($data, $userInfo ? $userInfo->toArray() : []);
+
+        return jsonResponse(data: $responseData, message: "OK", status: 200);
     }
 
     public function delete(FindUserRequest $request)

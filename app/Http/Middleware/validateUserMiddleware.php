@@ -26,6 +26,11 @@ class validateUserMiddleware
         if (!$isValidUser) {
             return jsonResponse(status: 403, message: "Acceso denegado", errors: ["error" => "No tiene permisos para realizar esta accion"]);
         }
+
+        //se obtiene el id para usarlo en los endpoints, por ejemplo para inscribir alumnos
+        $id = $payload->get('id');
+        $request->headers->set('X-User-Id',$id);
+
         return $next($request);
     }
 }

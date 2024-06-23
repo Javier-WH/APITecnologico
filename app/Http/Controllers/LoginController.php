@@ -34,6 +34,7 @@ class LoginController extends Controller
         return jsonResponse(data: [
             'token' => $token,
             'expires_in' => auth()->factory()->getTTL() * 60,
+            'id' => $user->id
         ]);
     }
 }

@@ -1,10 +1,11 @@
 <?php
 
-
+use App\Http\Controllers\ApiUserInfoController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\SagaStudentController;
+
 
 /**
  * Rutas del api
@@ -23,6 +24,12 @@ Route::prefix('user')->middleware('validateToken')->group(function () {
   Route::get('/', [RegisterController::class, 'show'])->middleware('validateUser');
   Route::put('/', [RegisterController::class, 'update'])->middleware('validateUser');
   Route::patch('/', [RegisterController::class, 'updatePartial'])->middleware('validateUser');
+
+  Route::prefix('info')->middleware("validateUser")->group(function () {
+    Route::get('/', [ApiUserInfoController::class, 'setUserInfo']);
+    Route::patch('/', [ApiUserInfoController::class, 'updateInfo']);
+  });
+
 });
 
 
