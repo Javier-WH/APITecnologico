@@ -52,7 +52,7 @@ class RegisterController extends Controller
     {
         $request->validated();
         //la API no puede quedar sin administradores
-        if (User::count() === 1) {
+        if (User::where('level', 1)->count() == 1) {
             return jsonResponse(message: "La API solo tiene un administrador", status: 403, errors: ["error" => "No se puede borrar el administrador"]);
         }
 
@@ -66,7 +66,7 @@ class RegisterController extends Controller
         $userData = User::find($request->id);
         $userData->user = $request->user;
         $userData->password = $request->password;
-        $userData->level = $request->level;
+        $userData->level = $request->level ?? $userData->level; // si no viene el level, se mantendra el actual
         $userData->save();
         return jsonResponse(data: ["user_id" => $request->id], message: "User updated", status: 201);
     }
@@ -74,15 +74,9 @@ class RegisterController extends Controller
     public function updatePartial(UpdatePartialUserRequest $request)
     {
         $userData = User::find($request->id);
-        if($request->user != null) {
-            $userData->user = $request->user;
-        }
-        if($request->password != null) {
-            $userData->password = $request->password;
-        }
-        if($request->level != null) {
-            $userData->level = $request->level;
-        }
+        $userData->user = $request->filled('user') ? $request->user : $userData->user;
+        $userData->password = $request->filled('password') ? $request->password : $userData->password;
+        $userData->level = $request->filled('level') ? $request->level : $userData->level;
         $userData->save();
         return jsonResponse(data: ["user_id" => $request->id], message: "User updated", status: 201);
     }

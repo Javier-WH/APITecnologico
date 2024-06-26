@@ -25,7 +25,7 @@ class UpdateUserRequest extends FormRequest
             'id' => 'required | uuid | exists:api_users,id',
             'user' => 'required|string|max:50|unique:api_users,user',
             'password' => 'required|string|min:8|max:50',
-            'level' => 'required|integer|in:1,2,3',
+            'level' => 'integer|in:1,2,3',
         ];
     }
 
@@ -43,7 +43,6 @@ class UpdateUserRequest extends FormRequest
             'password.string' => 'La contraseña debe ser una cadena de texto.',
             'password.min' => 'La contraseña debe tener al menos :min caracteres.',
             'password.max' => 'La contraseña no puede tener más de :max caracteres.',
-            'level.required' => 'El nivel es obligatorio.',
             'level.integer' => 'El nivel debe ser un número entero.',
             'level.in' => 'El nivel debe ser 1, 2 o 3.',
         ];
