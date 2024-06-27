@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+
 class SagaAddStudentRequest extends FormRequest
 {
     /**
@@ -21,31 +22,59 @@ class SagaAddStudentRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'cedulapasaporte' => 'required|numeric|unique:alumnos,cedulapasaporte',
-            'nombre' => 'required|string|max:50',
-            'apellido' => 'required|string|max:50',
-            'nacionalidad_id' => 'required|numeric|exists:nacionalidads,id',
-            'sexo_id' => 'required|numeric|exists:sexos,id',
-            'fechanacimiento' => 'required|date',
-            'lugarnacimiento' => 'required|string|max:100',
-            'direccion' => 'required|string|max:100',
-            'parroquia_id' => 'required|numeric|exists:parroquias,id',
-            'telefono1' => 'required|string|max:50',
-            'telefono2' => 'required|string|max:50',
-            'email1' => 'required|string|max:50',
-            'email2' => 'required|string|max:50',
-            'provieneinstitucion' => 'required|string|max:100',
-            'fechaegresoinstitucion' => 'required|date',
-            'tienerusnies'=> 'required|boolean|nullable',
-            'esrusnies' => 'required|boolean|nullable',
-            'snirusnies' => 'required|numeric|nullable',
-            'semestre' => 'required|string|max:50',
-            'opcion' => 'required|numeric|nullable',
-            'esimpedido' => 'required|string|max:2|in:SI,NO',
-            'discapacidad_id' => 'required|numeric|exists:discapacidads,id',
-            'etnia_id' => 'required|numeric|exists:etnias,id',
-        ];
+        if ($this->isMethod('put')) {
+            return [
+                'cedulapasaporte' => 'numeric|unique:alumnos,cedulapasaporte',
+                'nombre' => 'string|max:50',
+                'apellido' => 'string|max:50',
+                'nacionalidad_id' => 'numeric|exists:nacionalidads,id',
+                'sexo_id' => 'numeric|exists:sexos,id',
+                'fechanacimiento' => 'date',
+                'lugarnacimiento' => 'string|max:100',
+                'direccion' => 'string|max:100',
+                'parroquia_id' => 'numeric|exists:parroquias,id',
+                'telefono1' => 'string|max:50',
+                'telefono2' => 'string|max:50',
+                'email1' => 'string|max:50',
+                'email2' => 'string|max:50',
+                'provieneinstitucion' => 'string|max:100',
+                'fechaegresoinstitucion' => 'date',
+                'tienerusnies' => 'boolean|nullable',
+                'esrusnies' => 'boolean|nullable',
+                'snirusnies' => 'numeric|nullable',
+                'semestre' => 'string|max:50',
+                'opcion' => 'numeric|nullable',
+                'esimpedido' => 'string|max:2|in:SI,NO',
+                'discapacidad_id' => 'numeric|exists:discapacidads,id',
+                'etnia_id' => 'numeric|exists:etnias,id',
+            ];
+        }else if($this->isMethod('post')){
+            return [
+                'cedulapasaporte' => 'required|numeric|unique:alumnos,cedulapasaporte',
+                'nombre' => 'required|string|max:50',
+                'apellido' => 'required|string|max:50',
+                'nacionalidad_id' => 'required|numeric|exists:nacionalidads,id',
+                'sexo_id' => 'required|numeric|exists:sexos,id',
+                'fechanacimiento' => 'required|date',
+                'lugarnacimiento' => 'required|string|max:100',
+                'direccion' => 'required|string|max:100',
+                'parroquia_id' => 'required|numeric|exists:parroquias,id',
+                'telefono1' => 'required|string|max:50',
+                'telefono2' => 'required|string|max:50',
+                'email1' => 'required|string|max:50',
+                'email2' => 'required|string|max:50',
+                'provieneinstitucion' => 'required|string|max:100',
+                'fechaegresoinstitucion' => 'required|date',
+                'tienerusnies' => 'required|boolean|nullable',
+                'esrusnies' => 'required|boolean|nullable',
+                'snirusnies' => 'required|numeric|nullable',
+                'semestre' => 'required|string|max:50',
+                'opcion' => 'required|numeric|nullable',
+                'esimpedido' => 'required|string|max:2|in:SI,NO',
+                'discapacidad_id' => 'required|numeric|exists:discapacidads,id',
+                'etnia_id' => 'required|numeric|exists:etnias,id',
+            ];
+        }
     }
 
     public function messages()
@@ -121,4 +150,5 @@ class SagaAddStudentRequest extends FormRequest
             'etnia_id.exists' => 'La etnia seleccionada no existe.',
         ];
     }
+
 }

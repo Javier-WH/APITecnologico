@@ -98,11 +98,14 @@ class SagaStudentController extends Controller
         return jsonResponse(message: "El alumno fue borrado con exito", status: 201);
     }
 
-    public function updateStudent(SagaUpdateStudentRequest $request)
+    public function updateStudent(SagaAddStudentRequest $request)
     {
         $data = $request->all();
         $ci = $request->query('ci');
         $student = SagaAlumnos::where('cedulapasaporte', $ci)->first();
+        if (!$student) {
+            return jsonResponse(message: "El alumno no esta registrado", status: 404);
+        }
         $student->update($data);
         return jsonResponse(status: 204);
     }

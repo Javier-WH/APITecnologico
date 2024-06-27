@@ -71,7 +71,7 @@ class RegisterController extends Controller
         return jsonResponse(data: ["user_id" => $request->id], message: "User updated", status: 201);
     }
 
-    public function updatePartial(UpdatePartialUserRequest $request)
+    public function updatePartial(UpdateUserRequest $request)
     {
         $userData = User::find($request->id);
         $userData->user = $request->filled('user') ? $request->user : $userData->user;

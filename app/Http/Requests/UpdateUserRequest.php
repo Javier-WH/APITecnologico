@@ -21,12 +21,21 @@ class UpdateUserRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'id' => 'required | uuid | exists:api_users,id',
+        $rules = [
+            'id' => 'required|uuid|exists:api_users,id',
             'user' => 'required|string|max:50|unique:api_users,user',
             'password' => 'required|string|min:8|max:50',
             'level' => 'integer|in:1,2,3',
         ];
+
+        if ($this->isMethod('patch')) {
+            $rules['id'] = 'sometimes|required|uuid|exists:api_users,id';
+            $rules['user'] = 'sometimes|required|string|max:50|unique:api_users,user';
+            $rules['password'] = 'sometimes|required|string|min:8|max:50';
+            $rules['level'] = 'sometimes|required|integer|in:1,2,3';
+        }
+
+        return $rules;
     }
 
     public function messages(): array

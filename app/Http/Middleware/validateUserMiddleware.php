@@ -6,6 +6,7 @@ use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use App\Constants\Level;
 
 class validateUserMiddleware
 {
@@ -31,12 +32,12 @@ class validateUserMiddleware
         $userLevel = $user->level;
 
         // Validar el nivel de usuario según el tipo de usuario recibido
-        if ($userType == 1) { // Validar para Administradores
-            if ($userLevel != 1) {
+        if ($userType == Level::ADMIN) { // Validar para Administradores
+            if ($userLevel != Level::ADMIN) {
                 return jsonResponse(status:403, message: 'Acceso denegado', errors:['error' => 'No tiene permisos de administrador']);
             }
-        } elseif ($userType == 2) { // Validar para Usuarios
-            if ($userLevel == 3) {
+        } elseif ($userType == Level::USER) { // Validar para Usuarios
+            if ($userLevel == Level::GUEST) {
                 return jsonResponse(status: 403, message: 'Acceso denegado', errors: ['error' => 'No tiene permisos de usuario']);
             }
         } else {
@@ -44,7 +45,7 @@ class validateUserMiddleware
         }
 
         // Validar si el usuario está intentando modificar su nivel de permisos
-        if ($request->has('level') && $userLevel != 1) {
+        if ($request->has('level') && $userLevel != Level::ADMIN) {
             return jsonResponse(status: 403, message: 'Acceso denegado', errors: ['error' => 'No tiene permisos para modificar el nivel de permisos']);
         }
 
