@@ -18,10 +18,18 @@ class DefaultAdminSeeder extends Seeder
                 User::create([
                     'id' => Str::uuid(),
                     'user' => 'defaultAdmin',
-                    'password' => 'admin123',
+                    'password' => '123456789',
                     'level' => '1',
                 ]);
-                info('Se ha creado el usuario por defecto: defaultAdmin');
+                info('Se ha creado el administrador por defecto: defaultAdmin');
+
+                User::create([
+                    'id' => Str::uuid(),
+                    'user' => 'defaultUser',
+                    'password' => '123456789',
+                    'level' => '2',
+                ]);
+                info('Se ha creado el usuario por defecto: admin');
             } catch (\Throwable $th) {
                 info($th->getMessage());
             }

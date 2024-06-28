@@ -9,14 +9,11 @@ use Tests\TestCase;
 class userTest extends TestCase
 {
 
-    /**
-     * @test
-    */
-    public function an_existging_user_can_login()
+    public function test_an_existging_user_can_login()
     {
         $credentials = [
-            'user' => 'Admin',
-            'password' => '123456789',
+            'user' => $this->defaultAdmin,
+            'password' => $this->defaultPassword,
         ];
 
         $response = $this->postJson("{$this->baseUrl}/login", $credentials);
@@ -35,10 +32,8 @@ class userTest extends TestCase
 
     }
 
-    /**
-     * @test
-     */
-    public function an_non_existging_user_cannot_login(): void
+
+    public function test_an_non_existging_user_cannot_login(): void
     {
         $credentials = [
             'user' => 'falso@correoFalso.com',
@@ -55,12 +50,10 @@ class userTest extends TestCase
     }
 
 
-    /**
-     * @test
-     */
-    public function an_user_must_be_provided(): void
+
+    public function test_an_user_must_be_provided(): void
     {
-        $credentials = ['password' => 'testPassword'];
+        $credentials = ['password' => $this->defaultPassword];
         $response = $this->postJson("{$this->baseUrl}/login", $credentials);
         $response->assertStatus(422);
         $response->assertJsonStructure([
@@ -71,12 +64,10 @@ class userTest extends TestCase
         ]);
     }
 
-    /**
-     * @test
-     */
-    public function a_password_must_be_provided(): void
+
+    public function test_a_password_must_be_provided(): void
     {
-        $credentials = ['user' => 'testUser'];
+        $credentials = ['user' => $this->defaultAdmin];
         $response = $this->postJson("{$this->baseUrl}/login", $credentials);
         $response->assertStatus(422);
         $response->assertJsonStructure([
@@ -87,16 +78,14 @@ class userTest extends TestCase
         ]);
     }
 
-    /**
-     * @test
-     */
-    public function an_user_cannot_be_created_by_user(): void
+
+    public function test_an_user_cannot_be_created_by_user(): void
     {
 
         //obtener el token de validacion
         $credentials = [
-            'user' => 'user',
-            'password' => 'user123456',
+            'user' => $this->defaultUser,
+            'password' => $this->defaultPassword,
         ];
         $response = $this->postJson("{$this->baseUrl}/login", $credentials);
         $token = $response->json('data.token');
@@ -124,16 +113,14 @@ class userTest extends TestCase
         $this->assertDatabaseMissing('api_users', ["user" => "TestUser2"]);
     }
 
-    /**
-     * @test
-     */
-    public function an_user_can_be_created_by_admin(): void
+
+    public function test_an_user_can_be_created_by_admin(): void
     {
 
         //obtener el token de validacion
         $credentials = [
-            'user' => 'Admin',
-            'password' => '123456789',
+            'user' => $this->defaultAdmin,
+            'password' => $this->defaultPassword,
         ];
         $response = $this->postJson("{$this->baseUrl}/login", $credentials);
         $token = $response->json('data.token');
@@ -163,16 +150,14 @@ class userTest extends TestCase
     }
 
 
-    /**
-     * @test
-     */
-    public function an_user_cannot_be_deleted_by_user(): void
+
+    public function test_an_user_cannot_be_deleted_by_user(): void
     {
 
         //obtener el token de validacion
         $credentials = [
-            'user' => 'user',
-            'password' => 'user123456',
+            'user' => $this->defaultUser,
+            'password' => $this->defaultPassword,
         ];
         $response = $this->postJson("{$this->baseUrl}/login", $credentials);
         $token = $response->json('data.token');
@@ -180,7 +165,7 @@ class userTest extends TestCase
         //obtener el id del usuario de la base de datos
         $userID = User::where('user', 'TestUser')->first()->id;
 
-
+////////////////////////////////////////////////////////////////////
         //datos del test
         $data = [
             'id' => $userID
@@ -201,16 +186,15 @@ class userTest extends TestCase
     }
 
 
-    /**
-     * @test
-     */
-    public function an_user_can_be_deleted_by_admin(): void
+
+    public function test_an_user_can_be_deleted_by_admin(): void
     {
+
 
         //obtener el token de validacion
         $credentials = [
-            'user' => 'Admin',
-            'password' => '123456789',
+            'user' => $this->defaultAdmin,
+            'password' => $this->defaultPassword,
         ];
         $response = $this->postJson("{$this->baseUrl}/login", $credentials);
         $token = $response->json('data.token');
@@ -218,6 +202,7 @@ class userTest extends TestCase
         //obtener el id del usuario de la base de datos
         $userID = User::where('user', 'TestUser')->first()->id;
 
+        /////////////////////////////////////////////////////////////////////
 
         //datos del test
         $data = [

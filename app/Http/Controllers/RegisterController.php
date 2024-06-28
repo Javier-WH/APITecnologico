@@ -51,12 +51,12 @@ class RegisterController extends Controller
     public function delete(FindUserRequest $request)
     {
         $request->validated();
+        $adminCounts = User::where('level', 1)->count();
+        $userData = User::find($request->id);
         //la API no puede quedar sin administradores
-        if (User::where('level', 1)->count() == 1) {
+        if ($userData->level == 1 && $adminCounts == 1) {
             return jsonResponse(message: "La API solo tiene un administrador", status: 403, errors: ["error" => "No se puede borrar el administrador"]);
         }
-
-        $userData = User::find($request->id);
         $userData->delete();
         return jsonResponse(data: ["user_id" => $request->id], message: "User deleted", status: 201);
     }

@@ -29,6 +29,7 @@ class validateUserMiddleware
 
         // Obtener el nivel del usuario desde la base de datos
         $user = User::find($payloadUserId);
+        if(!$user) return jsonResponse(status: 403, message: 'Acceso denegado', errors: ['error' => 'El usuario suministrado en el token no existe en la base de datos']);
         $userLevel = $user->level;
 
         // Validar el nivel de usuario según el tipo de usuario recibido
