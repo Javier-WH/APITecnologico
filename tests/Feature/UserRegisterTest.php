@@ -9,9 +9,7 @@ use Tests\TestCase;
 class UserRegisterTest extends TestCase
 {
     use RefreshDatabase;
-    /**
-     * @test
-     */
+
     public function a_user_can_register(): void
     {
         //$this->withoutExceptionHandling();

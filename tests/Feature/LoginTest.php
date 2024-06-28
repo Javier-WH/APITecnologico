@@ -9,6 +9,7 @@ use Tests\TestCase;
 class LoginTest extends TestCase
 {
 
+
     use RefreshDatabase;
 
     protected function setUp(): void
@@ -17,12 +18,10 @@ class LoginTest extends TestCase
         $this->seed(UserSeeder::class);
     }
 
-    /**
-     * @test
-     */
+
     public function an_existging_user_can_login(): void
     {
-       
+
         $credentials = [
             'user' => 'TestUser',
             'password' => 'test1234',
@@ -38,9 +37,7 @@ class LoginTest extends TestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+
     public function an_non_existging_user_cannot_login(): void
     {
 
@@ -60,27 +57,23 @@ class LoginTest extends TestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+
     public function an_user_must_be_provided(): void
     {
         $credentials = ['password' => 'testPassword'];
         $response = $this->postJson("{$this->baseUrl}/login", $credentials);
        // $response->dd();
-        $response->assertStatus(422);  
+        $response->assertStatus(422);
         $response->assertJsonStructure([
             'errors' => ['user'],
             'message',
             'status',
             'data'
         ]);
-       
+
     }
 
-    /**
-     * @test
-     */
+
     public function a_password_must_be_provided(): void
     {
         $credentials = ['user' => 'testUser'];
@@ -93,6 +86,6 @@ class LoginTest extends TestCase
             'status',
             'data'
         ]);
-     
+
     }
 }

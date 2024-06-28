@@ -2,7 +2,10 @@
 
 namespace App\Constants;
 
-//nivel de permiso de los usuarios y administradores
+
+/**
+ * Nivel de usuario (1 = Administrador, 2 = Usuario, 3 = Invitado)
+*/
 class Level{
     const ADMIN = 1;
     const USER = 2;

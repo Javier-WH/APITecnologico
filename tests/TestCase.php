@@ -6,5 +6,5 @@ use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
 {
-    protected $baseUrl = 'api/v1';
+    protected $baseUrl = '/api/v1';
 }
