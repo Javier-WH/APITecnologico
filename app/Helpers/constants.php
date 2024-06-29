@@ -11,3 +11,4 @@ class Level{
     const USER = 2;
     const GUEST = 3;
 }
+
