@@ -40,42 +40,10 @@ class SagaStudentsTest extends TestCase
             'Content-Type' => 'application/json',
             'Accept' => 'application/json'
         ];
-        $response = $this->withHeaders($header)->getJson("{$this->baseUrl}/student?ci=16193765", []);
-
+        $response = $this->withHeaders($header)->getJson("{$this->baseUrl}/student?ci=25664254", []);
+        //dd($response->json());
         $response->assertStatus(200);
-        $response->assertJsonStructure([
-            "data" => [
-                "id",
-                "cedula",
-                "nombre",
-                "apellido",
-                "fecha_nacimiento",
-                "lugar_nacimiento",
-                "direccion",
-                "telefono",
-                "telefono2",
-                "email",
-                "email2",
-                "institucion_origen",
-                "fecha_egreso_institucion_origen",
-                "tienerusnies",
-                "esrusnies",
-                "snirusnies",
-                "semestre",
-                "opcion",
-                "impedido",
-                "documentos_consignados",
-                "nacionalidad",
-                "sexo",
-                "parroquia",
-                "municipio",
-                "estado",
-                "discapacidad"
-            ],
-            'message',
-            'status',
-            'errors'
-        ]);
+        $response->assertJsonStructure($this->expectedGetStudentsResponse);
     }
 
     public function test_an_user_can_get_student_info(): void
@@ -99,39 +67,7 @@ class SagaStudentsTest extends TestCase
         $response = $this->withHeaders($header)->getJson("{$this->baseUrl}/student?ci=16193765", []);
 
         $response->assertStatus(200);
-        $response->assertJsonStructure([
-            "data" => [
-                "id",
-                "cedula",
-                "nombre",
-                "apellido",
-                "fecha_nacimiento",
-                "lugar_nacimiento",
-                "direccion",
-                "telefono",
-                "telefono2",
-                "email",
-                "email2",
-                "institucion_origen",
-                "fecha_egreso_institucion_origen",
-                "tienerusnies",
-                "esrusnies",
-                "snirusnies",
-                "semestre",
-                "opcion",
-                "impedido",
-                "documentos_consignados",
-                "nacionalidad",
-                "sexo",
-                "parroquia",
-                "municipio",
-                "estado",
-                "discapacidad"
-            ],
-            'message',
-            'status',
-            'errors'
-        ]);
+        $response->assertJsonStructure($this->expectedGetStudentsResponse);
     }
 
     public function test_a_guest_can_get_student_info(): void
@@ -155,39 +91,7 @@ class SagaStudentsTest extends TestCase
         $response = $this->withHeaders($header)->getJson("{$this->baseUrl}/student?ci=16193765", []);
 
         $response->assertStatus(200);
-        $response->assertJsonStructure([
-            "data" => [
-                "id",
-                "cedula",
-                "nombre",
-                "apellido",
-                "fecha_nacimiento",
-                "lugar_nacimiento",
-                "direccion",
-                "telefono",
-                "telefono2",
-                "email",
-                "email2",
-                "institucion_origen",
-                "fecha_egreso_institucion_origen",
-                "tienerusnies",
-                "esrusnies",
-                "snirusnies",
-                "semestre",
-                "opcion",
-                "impedido",
-                "documentos_consignados",
-                "nacionalidad",
-                "sexo",
-                "parroquia",
-                "municipio",
-                "estado",
-                "discapacidad"
-            ],
-            'message',
-            'status',
-            'errors'
-        ]);
+        $response->assertJsonStructure($this->expectedGetStudentsResponse);
     }
 
     public function test_an_guest_cannot_create_student(): void
