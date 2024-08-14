@@ -2,11 +2,10 @@
 
 use App\Http\Controllers\ApiUserInfoController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\SagaStudentController;
 use App\Constants\Level;
-
+use App\Http\Controllers\InscriptionController;
 
 /**
  * Rutas del api
@@ -17,8 +16,8 @@ Route::get('/health', function () {
     return 'Api operativa';
 });
 
-//login
-Route::post('/login', [LoginController::class, 'login']);
+
+Route::get('/student/inscription', [InscriptionController::class, 'index']);
 
 //rutas de usuario del api
 Route::prefix('user')->middleware('validateToken')->group(function () {

@@ -9,6 +9,7 @@ use App\Models\ApiUserInfo;
 use App\Models\SagaAlumnos;
 use App\Models\User;
 use Exception;
+use Illuminate\Support\Facades\DB;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class SagaStudentController extends Controller
@@ -33,6 +34,8 @@ class SagaStudentController extends Controller
                 ->join("notas", "notas.alumno_id", "=", "alumnos.id")
                 ->join("lapsos", "lapsos.id", "=", "notas.lapso_id")
                 ->join("programas", "programas.id", "=", "notas.programa_id")
+                ->leftJoin("inscripcions", "alumnos.id", "=", "inscripcions.alumno_id")
+                ->leftJoin("turnos", "turnos.id", "=", "inscripcions.turno_id")
                 ->where('alumnos.cedulapasaporte', $ci)
                 ->orderBy('notas.created', 'desc')
                 ->select(
@@ -63,7 +66,10 @@ class SagaStudentController extends Controller
                     'estados.estado as estado',
                     'discapacidads.describe as discapacidad',
                     'lapsos.PeriodoAcademico as periodo_academico',
-                    'programas.programa as programa',
+                    'programas.programa as PNF',
+                    'inscripcions.Seccion as seccion',
+                    'turnos.turno as turno',
+                    DB::raw("CASE WHEN inscripcions.alumno_id IS NULL THEN 'inactivo' ELSE 'activo' END AS estatus")
                 )
                 ->first();
 
@@ -121,4 +127,6 @@ class SagaStudentController extends Controller
         $student->update($data);
         return jsonResponse(status: 204);
     }
+
+
 }
