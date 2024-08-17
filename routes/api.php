@@ -6,6 +6,7 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\SagaStudentController;
 use App\Constants\Level;
 use App\Http\Controllers\InscriptionController;
+use App\Http\Controllers\LoginController;
 
 /**
  * Rutas del api
@@ -16,8 +17,9 @@ Route::get('/health', function () {
     return 'Api operativa';
 });
 
+Route::post('/login', [LoginController::class, 'login']);
 
-Route::get('/student/inscription', [InscriptionController::class, 'index']);
+
 
 //rutas de usuario del api
 Route::prefix('user')->middleware('validateToken')->group(function () {
@@ -45,6 +47,7 @@ Route::prefix('student')->middleware('validateToken')->group(function () {
     Route::get('/', [SagaStudentController::class, 'getStudent']);
 
     Route::middleware('validateUser:' . Level::USER)->group(function () {
+        Route::get('/inscription', [InscriptionController::class, 'index']);
         Route::post('/', [SagaStudentController::class, 'addStudent']);
         Route::delete('/', [SagaStudentController::class, 'deleteStudent']);
         Route::put('/', [SagaStudentController::class, 'updateStudent']);

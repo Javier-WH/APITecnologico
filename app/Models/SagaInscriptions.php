@@ -11,7 +11,7 @@ class SagaInscriptions extends Model
     protected $table = "inscripcions";
     public $timestamps = false;
 
-     protected $fillable = [
+    protected $fillable = [
         "id",
         "CODIGOMAT",
         "CEDULA",
@@ -27,5 +27,9 @@ class SagaInscriptions extends Model
         "turno_id",
         "estatusalumno_id",
         "alumno_id"
-     ];
+    ];
+    public function programas()
+    {
+        return $this->belongsTo(SagaProgramas::class, 'programa_id');
+    }
 }
