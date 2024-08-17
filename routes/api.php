@@ -47,9 +47,14 @@ Route::prefix('student')->middleware('validateToken')->group(function () {
     Route::get('/', [SagaStudentController::class, 'getStudent']);
 
     Route::middleware('validateUser:' . Level::USER)->group(function () {
-        Route::get('/inscription', [InscriptionController::class, 'index']);
+        Route::get('/inscription', [InscriptionController::class, 'Inscriptions']);
         Route::post('/', [SagaStudentController::class, 'addStudent']);
         Route::delete('/', [SagaStudentController::class, 'deleteStudent']);
         Route::put('/', [SagaStudentController::class, 'updateStudent']);
     });
+});
+
+Route::middleware(['validateToken', 'validateUser:' . Level::ADMIN])->group(function () {
+    Route::get('/ucslist', [InscriptionController::class, 'ucs']);
+    Route::get('/prelations', [InscriptionController::class, 'prelations']);
 });
