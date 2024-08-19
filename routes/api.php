@@ -57,4 +57,5 @@ Route::prefix('student')->middleware('validateToken')->group(function () {
 Route::middleware(['validateToken', 'validateUser:' . Level::ADMIN])->group(function () {
     Route::get('/ucslist', [InscriptionController::class, 'ucs']);
     Route::get('/prelations', [InscriptionController::class, 'prelations']);
+    Route::get('/programas', [InscriptionController::class, 'programas']);
 });

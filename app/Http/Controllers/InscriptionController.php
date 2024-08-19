@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\SagaInscriptions;
 use App\Models\SagaPrelacions;
+use App\Models\SagaProgramas;
 use App\Models\SagaUcs;
 
 class InscriptionController extends Controller
@@ -180,5 +181,17 @@ class InscriptionController extends Controller
         )
         ->get();
         return jsonResponse($data = $prelations, $status = 200);
+    }
+
+    public function programas() {
+        $programas = SagaProgramas::where('estatus', 'A')
+        ->select(
+            "id",
+            "programa",
+            "largo",
+            "char"
+        )
+        ->get();
+        return jsonResponse($data = $programas, $status = 200);
     }
 }
