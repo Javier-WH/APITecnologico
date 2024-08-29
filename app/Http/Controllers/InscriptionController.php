@@ -20,6 +20,7 @@ class InscriptionController extends Controller
             ->Leftjoin("sexos", "alumnos.sexo_id", "=", "sexos.id")
             ->select(
                 "inscripcions.id as id",
+                "inscripcions.nota as grade",
                 "inscripcions.alumno_id as student_id",
                 "inscripcions.Seccion as section",
                 "programas.id as programa_id",
@@ -71,6 +72,7 @@ class InscriptionController extends Controller
                     "inscription_id" => $item->id,
                     "student_id" => $item->student_id,
                     "section" => $item->section,
+                    "grade" => $item->grade,
                     "pnf_info" => [
                         "id" => $item->programa_id,
                         "programa" => $item->programa,
@@ -137,6 +139,10 @@ class InscriptionController extends Controller
             ->select(
                 "ucs.id",
                 "ucs.descripcion",
+                "ucs.ucr",
+                "ucs.htea",
+                "ucs.htei",
+                "ucs.thte",
                 "ucs.trayecto_id",
                 "ucs.programa_id",
                 "trayectos.trayecto",
@@ -152,6 +158,11 @@ class InscriptionController extends Controller
                     "id" => $subject->id,
                     "description" => $subject->descripcion,
                     "ucr" => $subject->ucr,
+                    "hours"=>[
+                        "htea" => $subject->htea,
+                        "htei" => $subject->htei,
+                        "thte" => $subject->thte
+                    ],
                     "trayecto_info" => [
                         "id" => $subject->trayecto_id,
                         "trayecto" => $subject->trayecto,
@@ -170,7 +181,8 @@ class InscriptionController extends Controller
         return jsonResponse($data = $ucs, $status = 200);
     }
 
-    public function prelations() {
+    public function prelations()
+    {
         $prelations = SagaPrelacions::select(
             "id",
             "uc_id",
@@ -179,19 +191,20 @@ class InscriptionController extends Controller
             "pensum_id",
             "estatus"
         )
-        ->get();
+            ->get();
         return jsonResponse($data = $prelations, $status = 200);
     }
 
-    public function programas() {
+    public function programas()
+    {
         $programas = SagaProgramas::where('estatus', 'A')
-        ->select(
-            "id",
-            "programa",
-            "largo",
-            "char"
-        )
-        ->get();
+            ->select(
+                "id",
+                "programa",
+                "largo",
+                "char"
+            )
+            ->get();
         return jsonResponse($data = $programas, $status = 200);
     }
 }
