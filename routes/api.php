@@ -58,4 +58,6 @@ Route::middleware(['validateToken', 'validateUser:' . Level::ADMIN])->group(func
     Route::get('/ucslist', [InscriptionController::class, 'ucs']);
     Route::get('/prelations', [InscriptionController::class, 'prelations']);
     Route::get('/programas', [InscriptionController::class, 'programas']);
+    Route::get('/trayectos', [InscriptionController::class, 'trayectos']);
+    Route::get('/turnos', [InscriptionController::class, 'turnos']);
 });

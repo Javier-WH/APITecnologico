@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\SagaInscriptions;
 use App\Models\SagaPrelacions;
 use App\Models\SagaProgramas;
+use App\Models\SagaTrayectos;
+use App\Models\SagaTurnos;
 use App\Models\SagaUcs;
 
 class InscriptionController extends Controller
@@ -206,5 +208,28 @@ class InscriptionController extends Controller
             )
             ->get();
         return jsonResponse($data = $programas, $status = 200);
+    }
+
+    public function trayectos(){
+        $trayectos = SagaTrayectos::where('estatus', 'A')
+            ->select(
+                "id",
+                "trayecto",
+                "estatus"
+            )
+            ->get();
+        return jsonResponse($data = $trayectos, $status = 200);
+    }
+
+    public function turnos(){
+        $turnos = SagaTurnos::where('estatus', 'A')
+            ->select(
+                "id",
+                "turno",
+                "user_id",
+                "char"
+            )
+            ->get();
+        return jsonResponse($data = $turnos, $status = 200);
     }
 }
