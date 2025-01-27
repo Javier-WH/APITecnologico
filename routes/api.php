@@ -7,6 +7,7 @@ use App\Http\Controllers\SagaStudentController;
 use App\Constants\Level;
 use App\Http\Controllers\InscriptionController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\SagaProfesorController;
 
 /**
  * Rutas del api
@@ -60,4 +61,6 @@ Route::middleware(['validateToken', 'validateUser:' . Level::ADMIN])->group(func
     Route::get('/programas', [InscriptionController::class, 'programas']);
     Route::get('/trayectos', [InscriptionController::class, 'trayectos']);
     Route::get('/turnos', [InscriptionController::class, 'turnos']);
+    // profesores
+    Route::get('/teachers', [SagaProfesorController::class, 'getTeachers']);
 });
