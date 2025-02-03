@@ -8,6 +8,7 @@ use App\Models\SagaProgramas;
 use App\Models\SagaTrayectos;
 use App\Models\SagaTurnos;
 use App\Models\SagaUcs;
+use Illuminate\Support\Facades\DB;
 
 class InscriptionController extends Controller
 {
@@ -137,7 +138,8 @@ class InscriptionController extends Controller
     {
 
         $ucs = SagaUcs::leftJoin("trayectos", "trayectos.id", "=", "ucs.trayecto_id")
-            ->leftJoin("programas", "programas.id", "=", "ucs.programa_id")
+            ->leftJoin("programas", "programas.id", "=", "ucs.programa_id", "and", "programas.id", "=", "pensum_ucs.pensum_id")
+            ->leftJoin("pensum_ucs", "pensum_ucs.uc_id", "=", "ucs.id")
             ->select(
                 "ucs.id",
                 "ucs.descripcion",
@@ -152,7 +154,22 @@ class InscriptionController extends Controller
                 "programas.programa",
                 "programas.estatus",
                 "programas.largo",
-                "programas.char"
+                "programas.char",
+                DB::raw('CASE
+                    WHEN pensum_ucs.ptrimestre_1 = 100 THEN true
+                    WHEN pensum_ucs.ptrimestre_1 = 0 THEN false
+                    ELSE true
+                END as q1'),
+                DB::raw('CASE
+                    WHEN pensum_ucs.ptrimestre_1 = 100 THEN true
+                    WHEN pensum_ucs.ptrimestre_2 = 0 THEN false
+                    ELSE true
+                END as q2'),
+                DB::raw('CASE
+                    WHEN pensum_ucs.ptrimestre_1 = 100 THEN true
+                    WHEN pensum_ucs.ptrimestre_3 = 0 THEN false
+                    ELSE true
+                END as q3')
             )
             ->get()
             ->map(function ($subject) {
@@ -160,7 +177,7 @@ class InscriptionController extends Controller
                     "id" => $subject->id,
                     "description" => $subject->descripcion,
                     "ucr" => $subject->ucr,
-                    "hours"=>[
+                    "hours" => [
                         "htea" => $subject->htea,
                         "htei" => $subject->htei,
                         "thte" => $subject->thte
@@ -176,6 +193,11 @@ class InscriptionController extends Controller
                         "status" => $subject->estatus,
                         "largo" => $subject->largo,
                         "char" => $subject->char
+                    ],
+                    "quarters" => [
+                        "q1" => $subject->q1,
+                        "q2" => $subject->q2,
+                        "q3" => $subject->q3
                     ]
                 ];
             });
@@ -210,7 +232,8 @@ class InscriptionController extends Controller
         return jsonResponse($data = $programas, $status = 200);
     }
 
-    public function trayectos(){
+    public function trayectos()
+    {
         $trayectos = SagaTrayectos::where('estatus', 'A')
             ->select(
                 "id",
@@ -221,7 +244,8 @@ class InscriptionController extends Controller
         return jsonResponse($data = $trayectos, $status = 200);
     }
 
-    public function turnos(){
+    public function turnos()
+    {
         $turnos = SagaTurnos::where('estatus', 'A')
             ->select(
                 "id",
