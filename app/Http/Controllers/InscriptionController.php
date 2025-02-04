@@ -10,11 +10,9 @@ use App\Models\SagaTurnos;
 use App\Models\SagaUcs;
 use Illuminate\Support\Facades\DB;
 
-class InscriptionController extends Controller
-{
+class InscriptionController extends Controller {
 
-    public function Inscriptions()
-    {
+    public function Inscriptions() {
         $inscriptions = SagaInscriptions::leftJoin("programas", "programas.id", "=", "inscripcions.programa_id")
             ->leftJoin("ucs", "ucs.id", "=", "inscripcions.uc_id")
             ->Leftjoin("lapsos", "lapsos.id", "=", "inscripcions.lapso_id")
@@ -134,12 +132,11 @@ class InscriptionController extends Controller
     }
 
 
-    public function ucs()
-    {
+    public function ucs() {
 
         $ucs = SagaUcs::leftJoin("trayectos", "trayectos.id", "=", "ucs.trayecto_id")
             ->leftJoin("programas", "programas.id", "=", "ucs.programa_id", "and", "programas.id", "=", "pensum_ucs.pensum_id")
-            ->leftJoin("pensum_ucs", "pensum_ucs.uc_id", "=", "ucs.id")
+            ->leftJoin("pensum_ucs", "pensum_ucs.uc_id", "=", "ucs.id", "and", "pensum_ucs.tipopensum_id", "=", "1")
             ->select(
                 "ucs.id",
                 "ucs.descripcion",
@@ -156,17 +153,15 @@ class InscriptionController extends Controller
                 "programas.largo",
                 "programas.char",
                 DB::raw('CASE
-                    WHEN pensum_ucs.ptrimestre_1 = 100 THEN true
                     WHEN pensum_ucs.ptrimestre_1 = 0 THEN false
                     ELSE true
                 END as q1'),
                 DB::raw('CASE
-                    WHEN pensum_ucs.ptrimestre_1 = 100 THEN true
                     WHEN pensum_ucs.ptrimestre_2 = 0 THEN false
                     ELSE true
                 END as q2'),
                 DB::raw('CASE
-                    WHEN pensum_ucs.ptrimestre_1 = 100 THEN true
+                
                     WHEN pensum_ucs.ptrimestre_3 = 0 THEN false
                     ELSE true
                 END as q3')
@@ -205,8 +200,7 @@ class InscriptionController extends Controller
         return jsonResponse($data = $ucs, $status = 200);
     }
 
-    public function prelations()
-    {
+    public function prelations() {
         $prelations = SagaPrelacions::select(
             "id",
             "uc_id",
@@ -219,8 +213,7 @@ class InscriptionController extends Controller
         return jsonResponse($data = $prelations, $status = 200);
     }
 
-    public function programas()
-    {
+    public function programas() {
         $programas = SagaProgramas::where('estatus', 'A')
             ->select(
                 "id",
@@ -232,8 +225,7 @@ class InscriptionController extends Controller
         return jsonResponse($data = $programas, $status = 200);
     }
 
-    public function trayectos()
-    {
+    public function trayectos() {
         $trayectos = SagaTrayectos::where('estatus', 'A')
             ->select(
                 "id",
@@ -244,8 +236,7 @@ class InscriptionController extends Controller
         return jsonResponse($data = $trayectos, $status = 200);
     }
 
-    public function turnos()
-    {
+    public function turnos() {
         $turnos = SagaTurnos::where('estatus', 'A')
             ->select(
                 "id",
