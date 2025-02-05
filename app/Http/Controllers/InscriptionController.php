@@ -152,6 +152,7 @@ class InscriptionController extends Controller {
                 "programas.estatus",
                 "programas.largo",
                 "programas.char",
+                "pensum_ucs.total_horas as hours",
                 DB::raw('CASE
                     WHEN pensum_ucs.ptrimestre_1 = 0 THEN false
                     ELSE true
@@ -173,6 +174,7 @@ class InscriptionController extends Controller {
                     "description" => $subject->descripcion,
                     "ucr" => $subject->ucr,
                     "hours" => [
+                        "total" => $subject->hours,
                         "htea" => $subject->htea,
                         "htei" => $subject->htei,
                         "thte" => $subject->thte
