@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class SagaInscriptions extends Model
 {
     use HasFactory;
-    protected $table = "inscripcions";
+    protected $table = "api_inscripcions";
     public $timestamps = false;
 
     protected $fillable = [

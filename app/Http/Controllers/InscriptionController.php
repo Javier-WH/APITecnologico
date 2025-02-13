@@ -13,17 +13,17 @@ use Illuminate\Support\Facades\DB;
 class InscriptionController extends Controller {
 
     public function Inscriptions() {
-        $inscriptions = SagaInscriptions::leftJoin("programas", "programas.id", "=", "inscripcions.programa_id")
-            ->leftJoin("ucs", "ucs.id", "=", "inscripcions.uc_id")
-            ->Leftjoin("lapsos", "lapsos.id", "=", "inscripcions.lapso_id")
-            ->Leftjoin("turnos", "turnos.id", "=", "inscripcions.turno_id")
-            ->Leftjoin("alumnos", "alumnos.id", "=", "inscripcions.alumno_id")
+        $inscriptions = SagaInscriptions::leftJoin("programas", "programas.id", "=", "api_inscripcions.programa_id")
+            ->leftJoin("ucs", "ucs.id", "=", "api_inscripcions.uc_id")
+            ->Leftjoin("lapsos", "lapsos.id", "=", "api_inscripcions.lapso_id")
+            ->Leftjoin("turnos", "turnos.id", "=", "api_inscripcions.turno_id")
+            ->Leftjoin("alumnos", "alumnos.id", "=", "api_inscripcions.alumno_id")
             ->Leftjoin("sexos", "alumnos.sexo_id", "=", "sexos.id")
             ->select(
-                "inscripcions.id as id",
-                "inscripcions.nota as grade",
-                "inscripcions.alumno_id as student_id",
-                "inscripcions.Seccion as section",
+                "api_inscripcions.id as id",
+                "api_inscripcions.nota as grade",
+                "api_inscripcions.alumno_id as student_id",
+                "api_inscripcions.Seccion as section",
                 "programas.id as programa_id",
                 "programas.programa",
                 "programas.estatus",
@@ -66,7 +66,7 @@ class InscriptionController extends Controller {
                 "alumnos.sexo_id as student_sex",
                 "sexos.sexo as student_sex_name"
             )
-            ->orderBy('inscripcions.alumno_id', 'desc')
+            ->orderBy('api_inscripcions.alumno_id', 'desc')
             ->get()
             ->map(function ($item) {
                 return [
@@ -162,7 +162,7 @@ class InscriptionController extends Controller {
                     ELSE true
                 END as q2'),
                 DB::raw('CASE
-                
+
                     WHEN pensum_ucs.ptrimestre_3 = 0 THEN false
                     ELSE true
                 END as q3')
