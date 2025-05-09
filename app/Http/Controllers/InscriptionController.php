@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\SagaInscriptions;
+use App\Models\SagaPensums;
 use App\Models\SagaPrelacions;
 use App\Models\SagaProgramas;
 use App\Models\SagaTrayectos;
@@ -133,10 +134,39 @@ class InscriptionController extends Controller {
 
 
     public function ucs() {
+        /*
+        $informaticaId = SagaPensums::where('tipopensum_id', 1)
+            ->where('programa_id', 13)
+            ->latest('id')
+            ->value('id');
+
+        $administracionId = SagaPensums::where('tipopensum_id', 1)
+            ->where('programa_id', 12)
+            ->latest('id')
+            ->value('id');
+
+        $agroalimentacionId = SagaPensums::where('tipopensum_id', 1)
+            ->where('programa_id', 11)
+            ->latest('id')
+            ->value('id');
+
+        $veterinariaId = SagaPensums::where('tipopensum_id', 1)
+            ->where('programa_id', 18)
+            ->latest('id')
+            ->value('id');
+*/
+        $pensumIds = SagaPensums::where('tipopensum_id', 1)
+            //->whereIn('programa_id', [13, 12, 11, 18]) // Filtra los programa_id
+            ->groupBy('programa_id')
+            ->selectRaw('programa_id, MAX(id) as max_id')
+            ->pluck('max_id') // Obtiene solo los valores (IDs)
+            ->toArray();
+
+
 
         $ucs = SagaUcs::leftJoin("trayectos", "trayectos.id", "=", "ucs.trayecto_id")
-            ->leftJoin("programas", "programas.id", "=", "ucs.programa_id", "and", "programas.id", "=", "pensum_ucs.pensum_id")
-            ->leftJoin("pensum_ucs", "pensum_ucs.uc_id", "=", "ucs.id", "and", "pensum_ucs.tipopensum_id", "=", "1")
+            ->leftJoin("programas", "programas.id", "=", "ucs.programa_id")
+            ->leftJoin("pensum_ucs", "pensum_ucs.uc_id", "=", "ucs.id")->whereIn("pensum_ucs.pensum_id", $pensumIds)
             ->select(
                 "ucs.id",
                 "ucs.descripcion",
@@ -153,6 +183,7 @@ class InscriptionController extends Controller {
                 "programas.largo",
                 "programas.char",
                 "pensum_ucs.total_horas as hours",
+                "pensum_ucs.numero_de_veces as times",
                 DB::raw('CASE
                     WHEN pensum_ucs.ptrimestre_1 = 0 THEN false
                     ELSE true
@@ -175,6 +206,7 @@ class InscriptionController extends Controller {
                     "ucr" => $subject->ucr,
                     "hours" => [
                         "total" => $subject->hours,
+                        "times" => $subject->times,
                         "htea" => $subject->htea,
                         "htei" => $subject->htei,
                         "thte" => $subject->thte
